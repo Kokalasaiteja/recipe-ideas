@@ -1,2 +1,2 @@
-Flask
-google-generativeai
+Flask==2.3.2
+google-generativeai==1.0.0  
