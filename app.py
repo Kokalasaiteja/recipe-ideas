@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 import google.generativeai as genai
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 
-# 🔑 Configure your Gemini API key
 genai.configure(api_key="AIzaSyAfx1btejKtGHduf0ObU8TOiwIsXS2MXHw")
 
 @app.route('/')
@@ -25,10 +24,10 @@ def generate_recipe():
 
     For each recipe, provide:
     1. Recipe Title
-    2. Estimated Time (in minutes)
+    2. Estimated Time
     3. Ingredients List
-    4. Step-by-Step Cooking Instructions
-    5. Missing Ingredients (if any)
+    4. Steps
+    5. Missing Ingredients
     6. Short Note or Tip
     """
 
@@ -37,5 +36,5 @@ def generate_recipe():
 
     return jsonify({"response": response.text})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Vercel expects a callable named "app"
+handler = app
