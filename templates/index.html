@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recipe Ideas 🍲</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🥗 AI Recipe Ideas</h1>
+        <p>Get delicious recipes using your available ingredients!</p>
+
+        <div class="form">
+            <input type="text" id="ingredients" placeholder="Enter ingredients (e.g., tomato, rice, chicken)">
+            <input type="text" id="preferences" placeholder="Dietary preferences (e.g., vegetarian, gluten-free)">
+            <input type="text" id="cuisine" placeholder="Preferred cuisine (e.g., Italian, Asian)">
+            <input type="number" id="time" placeholder="Max cooking time (minutes)">
+            <button onclick="generateRecipe()">Generate Recipe 🍳</button>
+        </div>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        async function generateRecipe() {
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = "<p>⏳ Generating your recipes...</p>";
+
+            const payload = {
+                ingredients: document.getElementById("ingredients").value,
+                preferences: document.getElementById("preferences").value,
+                time: document.getElementById("time").value,
+                cuisine: document.getElementById("cuisine").value
+            };
+
+            const res = await fetch("/generate", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(payload)
+            });
+
+            const data = await res.json();
+            outputDiv.innerHTML = `<pre>${data.response}</pre>`;
+        }
+    </script>
+</body>
+</html>
