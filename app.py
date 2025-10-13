@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, jsonify
+from mangum import Mangum
 import google.generativeai as genai
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 
-genai.configure(api_key="AIzaSyAfx1btejKtGHduf0ObU8TOiwIsXS2MXHw")
+genai.configure(api_key="YOUR_GEMINI_API_KEY")
 
 @app.route('/')
 def index():
@@ -36,5 +37,5 @@ def generate_recipe():
 
     return jsonify({"response": response.text})
 
-# Vercel expects a callable named "app"
-handler = app
+# Adapter for serverless environments
+handler = Mangum(app)
