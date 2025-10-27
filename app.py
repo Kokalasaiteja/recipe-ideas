@@ -3,14 +3,13 @@ from mangum import Mangum
 import google.generativeai as genai
 from googleapiclient.discovery import build
 import re
-import os
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(api_key="AIzaSyCwYMbe13yOedIvoHdtsA5hn8F-AAuoGSs")
 
 # YouTube API setup
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+YOUTUBE_API_KEY = "AIzaSyAZdwM5vH9HB_28_-NAwmDFbDzHX7gylpg"
 youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
 
 # Image generation removed as per user request
