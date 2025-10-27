@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Recipe Ideas 🍲</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div class="container">
@@ -34,14 +35,35 @@
                 cuisine: document.getElementById("cuisine").value
             };
 
-            const res = await fetch("/generate", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify(payload)
-            });
+            try {
+                const res = await fetch("/generate", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(payload)
+                });
 
-            const data = await res.json();
-            outputDiv.innerHTML = `<pre>${data.response}</pre>`;
+                const data = await res.json();
+                if (data.response) {
+                    // Parse the response to handle YouTube thumbnails
+                    let lines = data.response.split('\n');
+                    let formattedLines = lines.map(line => {
+                        if (line.startsWith('8. 🖼️ YouTube Thumbnail: ')) {
+                            let thumbnail_url = line.substring('8. 🖼️ YouTube Thumbnail: '.length);
+                            return '<br><img src="' + thumbnail_url + '" alt="YouTube Thumbnail" style="max-width: 120px; height: auto;"><br>';
+                        } else {
+                            return line;
+                        }
+                    });
+                    let formattedResponse = formattedLines.join('\n');
+                    outputDiv.innerHTML = `<div style="white-space: pre-wrap;">${formattedResponse}</div>`;
+                } else if (data.error) {
+                    outputDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
+                } else {
+                    outputDiv.innerHTML = `<p style="color: red;">Unexpected response from server.</p>`;
+                }
+            } catch (error) {
+                outputDiv.innerHTML = `<p style="color: red;">Network error: ${error.message}</p>`;
+            }
         }
     </script>
 </body>
